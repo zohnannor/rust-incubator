@@ -6,14 +6,14 @@ trait MutMeSomehow {
     fn mut_me_somehow(self: Pin<&mut Self>);
 }
 
-impl<T: Unpin + Default> MutMeSomehow for Box<T> {
+impl<T: Default> MutMeSomehow for Box<T> {
     fn mut_me_somehow(self: Pin<&mut Self>) {
         let this = Pin::into_inner(self);
         core::mem::take(this.as_mut());
     }
 }
 
-impl<T: Unpin + Default> MutMeSomehow for Rc<T> {
+impl<T: Default> MutMeSomehow for Rc<T> {
     fn mut_me_somehow(self: Pin<&mut Self>) {
         let this = Pin::into_inner(self);
         if let Some(this) = Rc::get_mut(this) {
@@ -22,10 +22,13 @@ impl<T: Unpin + Default> MutMeSomehow for Rc<T> {
     }
 }
 
-impl<T: Unpin + Default> MutMeSomehow for Vec<T> {
+impl<T: Default> MutMeSomehow for Vec<T> {
     fn mut_me_somehow(self: Pin<&mut Self>) {
-        let this = Pin::into_inner(self);
-        this.clear();
+        // Safety: we are never moving the vector.
+        let this = unsafe { Pin::get_unchecked_mut(self) };
+        if let Some(el) = this.get_mut(0) {
+            core::mem::take(el);
+        }
     }
 }
 
