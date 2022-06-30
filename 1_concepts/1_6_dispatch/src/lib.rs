@@ -6,7 +6,7 @@ pub trait Storage<K, V> {
     fn remove(&mut self, key: &K) -> Option<V>;
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct User {
     pub id: u64,
     pub email: Cow<'static, str>,

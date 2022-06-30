@@ -2,18 +2,15 @@ use std::marker::PhantomData;
 
 use step_1_6::{Storage, User};
 
-pub struct UserRepository<K, S>
-where
-    S: Storage<K, User>,
-{
-    storage: S,
+pub struct UserRepository<K> {
+    storage: Box<dyn Storage<K, User>>,
     _k: PhantomData<K>,
 }
 
-impl<K, S: Storage<K, User>> UserRepository<K, S> {
-    pub fn new(storage: S) -> Self {
+impl<K> UserRepository<K> {
+    pub fn new<S: Storage<K, User> + 'static>(storage: S) -> Self {
         Self {
-            storage,
+            storage: Box::new(storage),
             _k: PhantomData::default(),
         }
     }
