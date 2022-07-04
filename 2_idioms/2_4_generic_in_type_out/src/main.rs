@@ -1,35 +1,41 @@
-use std::net::{IpAddr, SocketAddr};
+use std::{
+    borrow::Cow,
+    fmt,
+    net::{IpAddr, SocketAddr},
+};
 
 fn main() {
     println!("Refactor me!");
 
-    let mut err = Error::new("NO_USER".to_string());
-    err.status(404).message("User not found".to_string());
+    let mut err = Error::new("NO_USER");
+    err.status(404).message("User not found");
 }
 
 #[derive(Debug)]
-pub struct Error {
-    code: String,
+pub struct Error<'code, 'msg> {
+    code: Cow<'code, str>,
     status: u16,
-    message: String,
+    message: Cow<'msg, str>,
 }
 
-impl Default for Error {
+impl Default for Error<'_, '_> {
     #[inline]
     fn default() -> Self {
         Self {
-            code: "UNKNOWN".to_string(),
+            code: "UNKNOWN".into(),
             status: 500,
-            message: "Unknown error has happened.".to_string(),
+            message: "Unknown error has happened.".into(),
         }
     }
 }
 
-impl Error {
-    pub fn new(code: String) -> Self {
-        let mut err = Self::default();
-        err.code = code;
-        err
+impl<'code, 'msg> Error<'code, 'msg> {
+    pub fn new(code: impl Into<Cow<'code, str>>) -> Self {
+        let code = code.into();
+        Self {
+            code,
+            ..Self::default()
+        }
     }
 
     pub fn status(&mut self, s: u16) -> &mut Self {
@@ -37,18 +43,24 @@ impl Error {
         self
     }
 
-    pub fn message(&mut self, m: String) -> &mut Self {
-        self.message = m;
+    pub fn message(&mut self, m: impl Into<Cow<'msg, str>>) -> &mut Self {
+        self.message = m.into();
         self
     }
 }
 
-#[derive(Debug, Default)]
-pub struct Server(Option<SocketAddr>);
+#[derive(Debug)]
+pub struct Server(SocketAddr);
 
 impl Server {
-    pub fn bind(&mut self, ip: IpAddr, port: u16) {
-        self.0 = Some(SocketAddr::new(ip, port))
+    pub fn bind(addr: impl Into<IpAddr>, port: u16) -> Self {
+        Self(SocketAddr::from((addr.into(), port)))
+    }
+}
+
+impl fmt::Display for Server {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::Display::fmt(&self.0, f)
     }
 }
 
@@ -63,13 +75,11 @@ mod server_spec {
 
         #[test]
         fn sets_provided_address_to_server() {
-            let mut server = Server::default();
+            let server = Server::bind(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), 8080);
+            assert_eq!(format!("{}", server), "127.0.0.1:8080");
 
-            server.bind(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), 8080);
-            assert_eq!(format!("{}", server.0.unwrap()), "127.0.0.1:8080");
-
-            server.bind("::1".parse().unwrap(), 9911);
-            assert_eq!(format!("{}", server.0.unwrap()), "[::1]:9911");
+            let server = Server::bind("::1".parse::<IpAddr>().unwrap(), 9911);
+            assert_eq!(format!("{}", server), "[::1]:9911");
         }
     }
 }
