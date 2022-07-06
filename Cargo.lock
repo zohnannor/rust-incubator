@@ -357,6 +357,10 @@ version = "0.1.0"
 [[package]]
 name = "step_3_2"
 version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "step_3_3"
