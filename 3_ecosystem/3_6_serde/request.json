@@ -17,15 +17,18 @@
       "description": "test private tariff"
     }
   },
-  "gifts": [{
-    "id": 1,
-    "price": 2,
-    "description": "Gift 1"
-  }, {
-    "id": 2,
-    "price": 3,
-    "description": "Gift 2"
-  }],
+  "gifts": [
+    {
+      "id": 1,
+      "price": 2,
+      "description": "Gift 1"
+    },
+    {
+      "id": 2,
+      "price": 3,
+      "description": "Gift 2"
+    }
+  ],
   "debug": {
     "duration": "234ms",
     "at": "2019-06-28T08:35:46+00:00"
