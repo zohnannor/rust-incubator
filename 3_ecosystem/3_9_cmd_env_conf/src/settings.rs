@@ -1,6 +1,9 @@
+#![allow(dead_code)]
+
+use clap::Parser;
 use serde::Deserialize;
 
-#[derive(Deserialize, Default)]
+#[derive(Debug, Deserialize)]
 pub struct Config {
     mode: Mode,
     server: Server,
@@ -9,12 +12,12 @@ pub struct Config {
     background: Background,
 }
 
-#[derive(Deserialize, Default)]
+#[derive(Debug, Deserialize)]
 pub struct Mode {
     debug: bool,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Server {
     external_url: String,
     http_port: i64,
@@ -23,24 +26,12 @@ pub struct Server {
     metrics_port: i64,
 }
 
-impl Default for Server {
-    fn default() -> Self {
-        Self {
-            external_url: "http://127.0.0.1".to_string(),
-            http_port: 8081,
-            grpc_port: 8082,
-            healthz_port: 10025,
-            metrics_port: 9199,
-        }
-    }
-}
-
-#[derive(Deserialize, Default)]
+#[derive(Debug, Deserialize)]
 pub struct Db {
     mysql: Mysql,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Mysql {
     host: String,
     port: i64,
@@ -50,60 +41,38 @@ pub struct Mysql {
     connections: Connections,
 }
 
-impl Default for Mysql {
-    fn default() -> Self {
-        Self {
-            host: "127.0.0.1".to_string(),
-            port: 3306,
-            dating: "default".to_string(),
-            user: "root".to_string(),
-            pass: String::default(),
-            connections: Connections::default(),
-        }
-    }
-}
-
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Connections {
     max_idle: i64,
     max_open: i64,
 }
 
-impl Default for Connections {
-    fn default() -> Self {
-        Self {
-            max_idle: 30,
-            max_open: 30,
-        }
-    }
-}
-
-#[derive(Deserialize, Default)]
+#[derive(Debug, Deserialize)]
 pub struct Log {
     app: App,
 }
 
-#[derive(Deserialize, Default)]
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum LogLevel {
     Error,
     Warn,
-    #[default]
     Info,
     Debug,
     Trace,
 }
 
-#[derive(Deserialize, Default)]
+#[derive(Debug, Deserialize)]
 pub struct App {
     level: LogLevel,
 }
 
-#[derive(Deserialize, Default)]
+#[derive(Debug, Deserialize)]
 pub struct Background {
     watchdog: Watchdog,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Watchdog {
     #[serde(with = "humantime_serde")]
     period: std::time::Duration,
@@ -112,12 +81,34 @@ pub struct Watchdog {
     lock_timeout: std::time::Duration,
 }
 
-impl Default for Watchdog {
-    fn default() -> Self {
-        Self {
-            period: std::time::Duration::from_secs(5),
-            limit: 10,
-            lock_timeout: std::time::Duration::from_secs(4),
-        }
+#[derive(clap::Parser)]
+#[clap(author, version, long_about = None)]
+struct Args {
+    /// Enables debug mode
+    #[clap(short, long, action = clap::ArgAction::Count)]
+    debug: u8,
+
+    /// Path to configuration file
+    #[clap(short, long, env = "CONF_FILE", default_value = "config.toml")]
+    conf: std::path::PathBuf,
+}
+
+impl Config {
+    pub fn new() -> Result<Self, config::ConfigError> {
+        let Args { debug, conf } = Args::parse();
+
+        let config = config::Config::builder()
+            .add_source(config::File::with_name(
+                "3_ecosystem/3_9_cmd_env_conf/default.toml",
+            ))
+            .add_source(
+                config::File::with_name(conf.as_os_str().to_str().expect("invalid path"))
+                    .required(false),
+            )
+            .add_source(config::Environment::with_prefix("conf").separator("_"))
+            .set_override("mode.debug", debug)?
+            .build()?;
+
+        config.try_deserialize()
     }
 }
