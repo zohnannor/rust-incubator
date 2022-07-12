@@ -1,0 +1,16 @@
+[server]
+external_url = "http://0.0.0.0"
+http_port = 5555
+grpc_port = 5556
+healthz_port = 9998
+metrics_port = 9999
+
+[db.mysql]
+host = "0.0.0.0"
+port = 5432
+dating = "db"
+user = "user"
+pass = "123"
+
+[log.app]
+level = "trace"
