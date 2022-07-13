@@ -3,3 +3,8 @@ name = "step_3_12"
 version = "0.1.0"
 edition = "2021"
 publish = false
+
+[dependencies]
+actix-web = "4.1.0"
+serde = { version = "1.0.139", features = ["derive"] }
+sqlx = { version = "0.6.0", features = ["runtime-actix-native-tls", "sqlite"] }
