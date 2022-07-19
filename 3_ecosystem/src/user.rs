@@ -120,22 +120,30 @@ impl User {
         self_id: uuid::Uuid,
         friend_id: uuid::Uuid,
     ) -> Result<bool, String> {
-        let first = sqlx::query!(r#"DELETE FROM friend WHERE user_1 = $1"#, self_id)
-            .execute(pool)
-            .await
-            .map_err(|_| "users are not friends")?
-            .rows_affected()
+        let first = sqlx::query!(
+            r#"DELETE FROM friend WHERE user_1 = $1 AND user_2 = $2"#,
+            self_id,
+            friend_id
+        )
+        .execute(pool)
+        .await
+        .map_err(|_| "users are not friends")?
+        .rows_affected()
             == 1;
 
         if !first {
             return Err("users are not friends".to_string());
         }
 
-        let second = sqlx::query!(r#"DELETE FROM friend WHERE user_1 = $1"#, friend_id)
-            .execute(pool)
-            .await
-            .map_err(|_| "users are not friends")?
-            .rows_affected()
+        let second = sqlx::query!(
+            r#"DELETE FROM friend WHERE user_1 = $1 AND user_2 = $2"#,
+            friend_id,
+            self_id
+        )
+        .execute(pool)
+        .await
+        .map_err(|_| "users are not friends")?
+        .rows_affected()
             == 1;
 
         if !second {
