@@ -35,7 +35,7 @@ async fn graphql_api(
     session: UserSession,
     identity: Option<Identity>,
 ) -> actix_web::Result<impl Responder> {
-    let logged_before = session.is_logged();
+    let session_id_before = session.id();
 
     let context = Context {
         pool: pool.as_ref().clone(),
@@ -46,11 +46,14 @@ async fn graphql_api(
     let res =
         juniper_actix::graphql_handler(&graphql::schema(), &context, req.clone(), payload).await;
 
-    let logged_after = session.is_logged();
+    let session_id_after = session.id();
 
-    match (logged_before, logged_after) {
-        (true, false) => identity.unwrap().logout(),
-        (_, true) => {
+    match (session_id_before, session_id_after) {
+        (Ok(_), Err(_)) => identity.unwrap().logout(),
+        (Err(_), Ok(id)) => {
+            Identity::login(&req.extensions(), id.to_string()).unwrap();
+        }
+        (Ok(id_before), Ok(id_after)) if id_before != id_after => {
             Identity::login(&req.extensions(), session.id()?.to_string()).unwrap();
         }
         _ => {}
