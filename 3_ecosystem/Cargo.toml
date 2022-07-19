@@ -5,12 +5,19 @@ edition = "2021"
 publish = false
 
 [dependencies]
+actix-identity = "0.5.1"
+actix-session = { version = "0.7.0", features = ["cookie-session"] }
 actix-web = "4.1.0"
 argonautica = "0.2.0"
 color-eyre = "0.6.2"
 dotenv = "0.15.0"
-juniper = { version = "0.15.9", features = ["uuid"] }
-juniper_actix = "0.4.0"
+futures = "0.3.21"
+juniper = { git = "https://github.com/graphql-rust/juniper", default-features = false, features = [
+  "schema-language",
+  "url",
+  "uuid",
+] }
+juniper_actix = { git = "https://github.com/graphql-rust/juniper" }
 serde = "1.0.139"
 sqlx = { version = "0.6.0", features = [
   "runtime-actix-native-tls",
@@ -21,7 +28,7 @@ sqlx = { version = "0.6.0", features = [
 time = "0.3.11"
 tracing = "0.1.35"
 tracing-subscriber = { version = "0.3.14", features = ["env-filter"] }
-uuid = { version = "0.8.2", features = ["v4"] } # last version juniper supports
+uuid = { version = "1.1.2", features = ["v4"] }
 
 [profile.dev.package.sqlx-macros]
 opt-level = 3
