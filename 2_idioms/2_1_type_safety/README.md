@@ -1,5 +1,4 @@
-Step 2.1: Rich types ensure correctness
-=======================================
+# Step 2.1: Rich types ensure correctness
 
 __Estimated time__: 1 day
 
@@ -7,12 +6,10 @@ __Estimated time__: 1 day
 
 "Programming with types" inevitably implies its own idioms and patterns. The most common are described below.
 
-
-
-
 ## Newtype
 
 Consider the following example, which demonstrates a possible bug:
+
 ```rust
 #[derive(Clone)]
 struct Post {
@@ -28,9 +25,11 @@ fn repost(post: &Post, new_author_id: u64) -> Post {
     new_post
 }
 ```
+
 Here the problem occurs because our entities are expressed in values, so compiler makes no difference between `Post::id` and `Post::user_id` as they have the same type.
 
 Let's express those entities in types:
+
 ```rust
 mod post {
     #[derive(Clone, Debug, PartialEq)]
@@ -61,7 +60,9 @@ fn repost(post: &Post, new_author_id: user::Id) -> Post {
     new_post
 }
 ```
+
 Now, compiler is able to cut off this type of bugs _totally_ at compile time, and to be quite informative with errors:
+
 ```rust
 error[E0308]: mismatched types
   --> src/main.rs:27:19
@@ -78,12 +79,10 @@ This is what is called ["newtype pattern"][1]. [Newtypes][1] are a zero-cost abs
 The downside of using [newtype pattern][1] is a necessity of writing _more boilerplate code_, because you should provide common traits implementations by yourself (like `Clone`, `Copy`, `From`/`Into`/`AsRef`/`AsMut`), as without them the type won't be ergonomic in use. However, most of them can be _derived automatically_ with `std` capabilities or third-party derive-crates (like [`derive_more`]), so the cost is acceptable in most cases.
 
 For better understanding [newtype pattern][1], read through the following articles:
+
 - [Rust Design Patterns: Newtype][1]
 - [Rust By Example: 14.7. New Type Idiom][2]
 - [Alexis King: Parse, don’t validate][7] ([ru][7_ru])
-
-
-
 
 ## Typestates
 
@@ -94,19 +93,18 @@ Not always, but _yes_ in some cases. One possible way is to use [typestates][3] 
 A real-world example of applying this idiom in [Rust] would be the awesome [`state_machine_future`] crate.
 
 For better understanding [typestates][3], read through the following articles:
+
 - [David Teller: Typestates in Rust][3]
 - [Cliff L. Biffle: The Typestate Pattern in Rust][5]
 - [Ana Hobden: Pretty State Machine Patterns in Rust][4]
 - [Will Crichton: Type-level Programming in Rust][6]
 - [Sergey Potapov: Builder with typestate in Rust][8]
 
-
-
-
 ## Task
 
 For the `Post` type described above, assume the following behavior in our application:
-```
+
+```txt
 +-----+              +-------------+            +-----------+
 | New |--publish()-->| Unmoderated |--allow()-->| Published |
 +-----+              +-------------+            +-----------+
@@ -118,9 +116,6 @@ For the `Post` type described above, assume the following behavior in our applic
 ```
 
 Implement this behavior using [typestates idiom][3], so that calling `delete()` on `New` post (or calling `deny()` on `Deleted` post) will be a compile-time error.
-
-
-
 
 [`derive_more`]: https://docs.rs/derive_more
 [`state_machine_future`]: https://docs.rs/state_machine_future

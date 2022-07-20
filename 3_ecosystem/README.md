@@ -1,11 +1,11 @@
-Step 3: Ecosystem
-=================
+# Step 3: Ecosystem
 
 __Estimated time__: 5 days
 
 These steps describe common crates and tools in [Rust] ecosystem required for web backend development.
 
 Before completing this step you should complete all its sub-steps. After doing them you should be able to answer the following questions:
+
 - What testing capabilities does [Rust] offer and when should I use them? Why should I follow [BDD] style?
 - What are macros? How do they differ? What benefits does their usage give? When should I write one?
 - How to work with date and time in [Rust]? How should I store time? How should I return it to other applications?
@@ -22,16 +22,15 @@ Before completing this step you should complete all its sub-steps. After doing t
 - What should I use for HTTP server implementation in [Rust], when and why?
 - How should I interact with databases in [Rust] application and why? How can I organize migrations for my project?
 
-
-
-
 ## Task
 
 Write simple [GraphQL] API server with the following data model:
+
 - `User` has `id` (unique), `name` (unique) and `friends` (list of other `User`s) fields;
 - `User` is able to authenticate with its `password`.
 
 API requirements:
+
 - Ability to register users;
 - Ability to authenticate users;
 - Ability to retrieve a single user and all its friends (without their friends) (should require authorization);
@@ -40,13 +39,10 @@ API requirements:
 Web frameworks, tools and database choices are up to you. Keep things simple to fit into dedicate time.
 
 If you have enough time after implementing base requirements, consider to do the following for your solution:
+
 - Provide migration for database schema (if possible);
 - Add comprehensive documentation to you code;
 - Cover your implementation with unit and E2E tests.
-
-
-
-
 
 [BDD]: https://en.wikipedia.org/wiki/Behavior-driven_development
 [GraphQL]: https://graphql.org/learn

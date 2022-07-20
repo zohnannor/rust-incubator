@@ -1,12 +1,8 @@
-Step 1.5: Conversions, casting and dereferencing
-================================================
+# Step 1.5: Conversions, casting and dereferencing
 
 __Estimated time__: 1 day
 
 As [Rust] is a [strongly typed][1] language, all type conversions must be performed explicitly in the code. As [Rust] has a rich type system (programming logic and semantics are mostly expressed in types rather than in values), type conversions are inevitable in almost every single line of code. Fortunately, [Rust] offers [well-designed type conversion capabilities][`std::convert`], which are quite ergonomic, intuitive and are pleasant to use.
-
-
-
 
 ## Value-to-value conversion
 
@@ -23,14 +19,12 @@ let small_num: u16 = big_num.try_into().expect("Value is too big");
 Note, that __all these traits consume ownership__ of a passed value. However, they [can be implemented for references too][2] if you're treating a reference as a value.
 
 For better understanding [`From`]/[`Into`] and [`TryFrom`]/[`TryInto`] purpose, design, limitations and use cases read through:
+
 - [Rust By Example: 6.1. From and Into][8]
 - [Official `From` docs][`From`]
 - [Official `Into` docs][`Into`]
 - [Official `TryFrom` docs][`TryFrom`]
 - [Official `TryInto` docs][`TryInto`]
-
-
-
 
 ## Reference-to-reference conversion
 
@@ -44,21 +38,21 @@ let bytes: &[u8] = string.as_ref();
 [`AsRef`]/[`AsMut`] are commonly implemented for smart pointers to allow referring a data behind it via regular [Rust] references.
 
 For better understanding [`AsRef`]/[`AsMut`] purpose, design, limitations and use cases read through:
+
 - [Official `AsRef` docs][`AsRef`]
 - [Official `AsMut` docs][`AsMut`]
 - [Ricardo Martins: Convenient and idiomatic conversions in Rust][10]
-
 
 ### Difference from [`Borrow`]
 
 Novices in [Rust] are often confused with the fact that [`AsRef`]/[`AsMut`] and [`Borrow`]/[`BorrowMut`] traits have the same signatures, because it may not be clear which trait to use or implement for their needs.
 
 They, however, differ quite clear in their semantics (and so in their blanket and non-blanket `impl`s):
+
 - [`AsRef`]/[`AsMut`] encode "is a" semantics, meaning that the implementor type may be represented as a reference to the implemented type. More like one type may mimic another one.
 - [`Borrow`]/[`BorrowMut`] encode "has a" semantics, meaning that the implementor type contains the implemented type inside and may borrow it. More like one type is a container for another one.
 
 For example, it's natural for an `UserEmail` type to implement `AsRef<str>`, so it may be easily consumed in the code accepting `&str` (converted to `&str`). And it's good for some execution `Context` to implement `Borrow<dyn Repository>`, so it can be extracted and used where needed, without using the whole `Context`.
-
 
 ### Inner-to-outer conversion
 
@@ -79,7 +73,8 @@ impl AsRef<Id> for u8 {
     }
 }
 ```
-```
+
+```txt
 error[E0515]: cannot return reference to temporary value
   --> src/lib.rs:11:9
    |
@@ -105,9 +100,6 @@ impl AsRef<Id> for u8 {
 
 That's exactly what [`ref-cast`] crate checks and does, without necessity of writing `unsafe` explicitly. See [crate's documentation][`ref-cast`] for more explanations.
 
-
-
-
 ## Dereferencing
 
 [`Deref`]/[`DerefMut`] standard library trait __allows to implicitly coerce from a custom type to a reference__ when dereferencing (operator `*v`) is used. The most common example of this is using [`Box<T>`][`Box`] where `&T` is expected.
@@ -122,9 +114,9 @@ hello(&m);
 ```
 
 For better understanding [`Deref`] purpose, design, limitations and use cases read through:
+
 - [Rust Book: 15.2. Treating Smart Pointers Like Regular References with the Deref Trait][3]
 - [Official `Deref` docs][`Deref`]
-
 
 ### Incorrect usage
 
@@ -135,9 +127,6 @@ The common temptation is to use [`Deref`] in a combination with [newtype pattern
 > __`Deref` should only be implemented for smart pointers.__
 
 The wider explanation of this bad practice is given in [this SO answer][5] and [`Deref` polymorphism anti-pattern][6] description.
-
-
-
 
 ## Casting
 
@@ -154,22 +143,18 @@ fn average(values: &[f64]) -> f64 {
 However, it supports only a [small, fixed set of transformations][7], and __is not idiomatic to use when other conversion possibilities are available__ (like [`From`], [`TryFrom`], [`AsRef`]).
 
 See also:
+
 - [Rust By Example: 5.1. Casting][9]
 - [Rust Reference: 8.2.4. Type cast expressions][7]
-
-
-
 
 ## Task
 
 Implement the following types:
+
 1. `EmailString` - a type, which value can be only a valid email address string.
 2. `Random<T>` - a smart pointer, which takes 3 values of the pointed-to type on creation and points to one of them randomly every time is used.
 
 Provide conversion and `Deref` implementations for these types on your choice, to make their usage and interoperability with `std` types easy and ergonomic.
-
-
-
 
 [`as`]: https://doc.rust-lang.org/std/keyword.as.html
 [`AsMut`]: https://doc.rust-lang.org/std/convert/trait.AsMut.html

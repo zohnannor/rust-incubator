@@ -1,19 +1,17 @@
-Step 2.4: Abstract type in, concrete type out
-=============================================
+# Step 2.4: Abstract type in, concrete type out
 
 __Estimated time__: 1 day
-
-
-
 
 ## Abstracting over input type
 
 The common and obvious rules in [Rust] when choosing type for an input parameter are the following:
+
 - If you need a _read-only access_ to the value, then use a shared reference (`&T`).
 - If you want to _mutate the value in-place_, then use a mutable reference (`&mut T`).
 - If you want to _consume and own_ the value, then move it (`T`).
 
 Let's illustrate it with the following trivial examples:
+
 ```rust
 // Read-only access is enough here.
 pub fn just_print_stringy(v: &str) {
@@ -34,7 +32,9 @@ impl Nickname {
     }
 }
 ```
+
 However, due to the need of explicit type conversions in [Rust], such API can lack ergonomics in use (notice the explicit conversion methods that API user has to use):
+
 ```rust
 let mut nickname = Nickname::new("Vasya".to_string());
 add_hi(nickname.as_mut());
@@ -42,6 +42,7 @@ just_print_stringy(nickname.as_ref());
 ```
 
 The most standard way to improve ergonomics here is to __hide type conversions under-the-hood by abstracting over input types__ in our APIs:
+
 ```rust
 pub fn just_print_stringy<S: AsRef<str>>(v: S) {
     println!("{}", v.as_ref())
@@ -57,7 +58,9 @@ impl Nickname {
     }
 }
 ```
+
 And now our API is pleasant to use:
+
 ```rust
 let mut nickname = Nickname::new("Vasya");
 add_hi(&mut nickname);
@@ -69,12 +72,10 @@ This is one of the key features, which drive [Rust] expressiveness and ergonomic
 The downside of this idiom is that compiler generates more code due to monomorphization, so potentially leads to code bloating. The way it can be optimized has already been [explained in "Reducing code bloat optimization" section of 1.6 step][6].
 
 Further reading on theme:
+
 - [Joe Wilm: From &str to Cow][4]
 - [Pascal Hertleif: Elegant Library APIs in Rust: Use conversion traits][5]
 - [Carl M. Kadie: Nine Rules for Elegant Rust Library APIs][10]
-
-
-
 
 ## Returning concrete type
 
@@ -84,15 +85,9 @@ Consider [`Iterator`] adapter methods as an example: [`Iterator::map()`][7], [`I
 
 However, this is not a strict rule, so should not be applied blindly. If you _really need_ to abstract over a return type (for example, to future-proof your API), then just do it.
 
-
-
-
 ## Task
 
 Refactor the code contained in [this step's crate](src/main.rs) to make it more efficient, idiomatic, simple and pleasant to use.
-
-
-
 
 [`Iterator`]: https://doc.rust-lang.org/std/iter/trait.Iterator.html
 [Rust]: https://www.rust-lang.org

@@ -1,12 +1,8 @@
-Step 3.10: Multithreading and parallelism
-=========================================
+# Step 3.10: Multithreading and parallelism
 
 __Estimated time__: 1 day
 
 One of main [Rust]'s design goals is a [concurrency][1]. [Rust] has a [strong opinion][2] about that, while allows different concurrent models to coexist.
-
-
-
 
 ## Threads
 
@@ -17,13 +13,11 @@ Traditionally, [threads][3] are used for solving [CPU-bound] problems, as they a
 [crossbeam] crate also provides implementation of [scoped threads][5], which allow to borrow values from a stack.
 
 For better understanding [Rust] threads design, concepts, usage, and features (especially [TLS][4] is important and widely used one), read through the following articles:
+
 - [Rust Book: 16.1. Using Threads to Run Code Simultaneously][6]
 - [Rust By Example: 20.1. Threads][7]
 - [Official `std::thread` docs][`std::thread`]
 - [Nicky Meuleman: Multithreading in Rust][29]
-
-
-
 
 ## Synchronization
 
@@ -33,11 +27,12 @@ The [threads synchronization][11] is a wide topic, but generally it's done via [
 
 [Exclusive access][13] may be controlled via primitives of [`std::sync`] module of standard library.
 
-Threads communication is commonly represented via [channels][14] and is implemented in [`std::sync::mpsc`] module of standard library. 
+Threads communication is commonly represented via [channels][14] and is implemented in [`std::sync::mpsc`] module of standard library.
 
 Despite that, there is also [crossbeam] crate, which provides more feature-rich and optimized concurrency and synchronization primitives. The most notable is [crossbeam-channel] as [an enhancement][15] of `std` channel implementations.
 
 For better understanding and familiarity with [Rust] synchronization primitives design, concepts, usage, and features, read through the following articles:
+
 - [Rust Book: 16.2. Using Message Passing to Transfer Data Between Threads][16]
 - [Rust Book: 16.3. Shared-State Concurrency][13]
 - [Rust Blog: Fearless Concurrency with Rust][2]
@@ -49,9 +44,6 @@ For better understanding and familiarity with [Rust] synchronization primitives 
 - [Carl Fredrik Samson: Explaining Atomics in Rust][26]
 - [Aleksey Kladov: Mutexes Are Faster Than Spinlocks][27]
 
-
-
-
 ## Parallelism
 
 The important concept to understand is [how concurrency and parallelism differ][21].
@@ -61,6 +53,7 @@ The important concept to understand is [how concurrency and parallelism differ][
 Another way to perform parallel data processing _without using threads_ is [SIMD] instructions usage. If an algorithm is parallelizable enough, applying [SIMD] instructions may [increase performance drastically][24]. [Rust] ecosystem provides basic support for [SIMD] instructions in a form of [packed_simd] crate.
 
 For better understanding and familiarity with parallelism in [Rust], read through the following articles:
+
 - [Nicky Meuleman: Concurrent vs parallel][28]
 - [Official `rayon` crate docs][rayon]
 - [`rayon` crate FAQ][22]
@@ -70,20 +63,14 @@ For better understanding and familiarity with parallelism in [Rust], read throug
 - [Rust Edition Guide: 3.9. SIMD for faster computing][25]
 - [Official `packed_simd` crate docs][packed_simd]
 
-
-
-
 ## Task
 
 Write a program with the following workflow:
+
 - `Producer` is a separate thread, which continuously generates square matrixes of random `u8` elements and size `4096`.
 - `Consumer` is a separate thread, which takes a generated matrix, counts sum of all its elements and prints the sum to STDOUT.
 - There are only 1 `Producer` and 2 `Consumer`s.
-- Counting sum of matrix elements should be parallelized. 
-
-
-
-
+- Counting sum of matrix elements should be parallelized.
 
 [CPU-bound]: https://en.wikipedia.org/wiki/CPU-bound
 [crossbeam]: https://docs.rs/crossbeam

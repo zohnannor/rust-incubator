@@ -1,11 +1,11 @@
-Step 1: Concepts
-================
+# Step 1: Concepts
 
 __Estimated time__: 2 days
 
 These steps describe common and necessary-to-know concepts for everyday programming in [Rust].
 
 Before completing this step you should complete all its sub-steps. After doing them you should be able to answer the following questions:
+
 - How do I recognize that data is allocated at the heap rather than at the stack? When data should be allocated at the heap?
 - What is copying and cloning data in [Rust]? What's the difference? When and why should I use them?
 - How can a single piece of data be owned by multiple parts of program? When and why is this commonly required?
@@ -17,21 +17,16 @@ Before completing this step you should complete all its sub-steps. After doing t
 - Why phantom types exist? What problems do they solve?
 
 The following articles may help you to sum up your experience:
+
 - [Wrapper Types in Rust: Choosing Your Guarantees][1]
 - [Rust, Builder Pattern, Trait Objects, `Box<T>` and `Rc<T>`][2]
 - [Rust's Built-in Traits, the When, How & Why][3]
-
-
-
 
 ## Task
 
 Provide your own implementation of [doubly linked list][11] data structure. It should be [thread safe][12] without a necessity to use explicit synchronization primitives (like `Arc<Mutex<T>>`) on top of it.
 
 Prove your implementation correctness with tests. Provide both single-threaded and multi-threaded examples of usage.  
-
-
-
 
 [Rust]: https://www.rust-lang.org
 

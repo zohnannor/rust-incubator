@@ -1,10 +1,6 @@
-Step 3.9: Command-line arguments, environment variables and configs
-===================================================================
+# Step 3.9: Command-line arguments, environment variables and configs
 
 __Estimated time__: 1 day
-
-
-
 
 ## CLI
 
@@ -15,13 +11,11 @@ However, most of the time you require more advanced tool for that, which provide
 The next level is [structopt] crate, which is built on top of [clap], and allows to define [CLI] in a _declarative and clean way_.
 
 For better understanding and familiarity with [CLI] tools in [Rust] ecosystem, read through the following articles:
+
 - [Rust Book: 12.1. Accepting Command Line Arguments][1]
 - [Official `std::env::Arg` docs][`std::env::Arg`]
 - [Official `clap` crate docs][clap]
 - [Official `structopt` crate docs][structopt]
-
-
-
 
 ## Environment variables
 
@@ -32,19 +26,18 @@ However, most of the time you want to operate with typed data, not with raw stri
 Finally, [dotenv] crate should be mentioned. It sets environment variables basing on `.env` file contents, which is widely used convention to simplify environment configuration and to not declare all required environment variables by hand each time when running a program. This one is especially _useful in development_.
 
 For better understanding and familiarity with [environment variables][2] tools in [Rust] ecosystem, read through the following articles:
+
 - [Rust Book: 12.5. Working with Environment Variables][3]
 - [Official `std::env` docs][`std::env`]
 - [Official `envy` crate docs][envy]
 - [Official `dotenv` crate docs][dotenv]
-
-
-
 
 ## Configuration
 
 For dealing with configurations there is a well-known [config] crate in [Rust] ecosystem, which simplifies creation and usage of hierarchical typed configuration structures in a [12-factor] way.
 
 > Config lets you set a set of default parameters and then extend them via merging in configuration from a variety of sources:
+>
 > - Environment variables
 > - Another Config instance
 > - Remote configuration: etcd, Consul
@@ -52,28 +45,29 @@ For dealing with configurations there is a well-known [config] crate in [Rust] e
 > - Manual, programmatic override (via a `.set` method on the Config instance)
 >
 > Additionally, Config supports:
+>
 > - Live watching and re-reading of configuration files
 > - Deep access into the merged configuration via a path syntax
 > - Deserialization via `serde` of the configuration or any subset defined via a path
 
 For better understanding and familiarity with [config] crate design, concepts, usage, and features, read through the following articles:
+
 - [Official `config` crate docs][config]
 - [`config` crate examples][5]
 
-
-
-
 ## Task
 
-Write a simple program which prints out its actual configuration. Configuration should be implemented as a typed hierarchical structure, which is able to be parsed from a specified file and/or environment variables. 
+Write a simple program which prints out its actual configuration. Configuration should be implemented as a typed hierarchical structure, which is able to be parsed from a specified file and/or environment variables.
 
 The following priority should be applied (in ascending order) when merging:
+
 1. Default values declared directly in [Rust] sources;
 2. Values read from TOML file;
 3. Values set by environment variables with `CONF_` prefix.
 
 [CLI] of the program should look like:
-```
+
+```txt
 $ cargo run -- --help
 step_3_9 0.1.0
 Prints its configuration to STDOUT.
@@ -89,10 +83,6 @@ FLAGS:
 OPTIONS:
     -c, --conf <conf>         Path to configuration file [env: CONF_FILE=]  [default: config.toml]
 ```
-
-
-
-
 
 [12-factor]: https://12factor.net/config
 [clap]: https://docs.rs/clap

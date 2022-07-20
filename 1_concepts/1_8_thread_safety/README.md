@@ -1,11 +1,11 @@
-Step 1.8: Thread safety
-=======================
+# Step 1.8: Thread safety
 
 __Estimated time__: 1 day
 
 [Rust] has [`Send`] and [`Sync`] marker traits which are fundamental for concurrency and thread safety story in [Rust] and represent one of [fearless concurrency][2] corner stones (which allow to [avoid data races][1] at compile time).
 
 For better understanding [`Send`]/[`Sync`] purpose, design, limitations and use cases, read through the following articles:
+
 - [Official `Send` docs][`Send`]
 - [Official `Sync` docs][`Sync`]
 - [Rust Book: 16.4. Extensible Concurrency with the Sync and Send Traits][3]
@@ -14,12 +14,10 @@ For better understanding [`Send`]/[`Sync`] purpose, design, limitations and use 
 - [nyanpasu64: An unsafe tour of Rust's Send and Sync][6]
 - [Josh Haberman: Thread Safety in C++ and Rust][7]
 
-
-
-
 ## Task
 
 Implement the following types, which meet conditions:
+
 1. `OnlySync` is `Sync`, but `!Send`.
 2. `OnlySend` is `Send`, but `!Sync`.
 3. `SyncAndSend` is both `Sync` and `Send`.
@@ -28,9 +26,6 @@ Implement the following types, which meet conditions:
 All inner details of implementation  are on your choice.
 
 Play with these types from multiple threads to see how compile time [fearless concurrency][2] works in practice.
-
-
-
 
 [Rust]: https://www.rust-lang.org
 [`Send`]: https://doc.rust-lang.org/std/marker/trait.Send.html

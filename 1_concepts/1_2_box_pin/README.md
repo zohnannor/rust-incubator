@@ -1,10 +1,6 @@
-Step 1.2: Boxing and pinning
-============================
+# Step 1.2: Boxing and pinning
 
 __Estimated time__: 1 day
-
-
-
 
 ## Boxing
 
@@ -15,13 +11,11 @@ It's more idiomatic to use references (`&T`/`&mut T`) for pointing to the data, 
 [`Box`] is also a way to go if an owned [slice] is needed, but is not intended to be resized. For example, `Box<str>`/`Box<[T]>` are often used instead `String`/`Vec<T>` in such cases.
 
 For better understanding [`Box`] purpose, design, limitations and use cases read through:
+
 - [Rust Book: 15.1. Using Box to Point to Data on the Heap][1]
 - [Official `std::boxed` docs][`std::boxed`]
 - [Amos: What's in the box?][3]
 - [Mahdi Dibaiee: What is `Box<str>` and how is it different from `String` in Rust?][8]
-
-
-
 
 ## Pinning
 
@@ -34,6 +28,7 @@ However, many types are always freely movable, even when pinned, because they do
 Note, that pinning and [`Unpin`] only affect the pointed-to type `P::Target`, not the pointer type `P` itself that got wrapped in `Pin<P>`. For example, whether or not `Box<T>` is `Unpin` has no effect on the behavior of `Pin<Box<T>>` (here, `T` is the pointed-to type).
 
 For better understanding [`Pin`] purpose, design, limitations and use cases read through:
+
 - [Official `std::pin` docs][`std::pin`]
 - [Reddit: Pinned objects ELI5?][1]
 - [Adam Chalmers: Pin, Unpin, and why Rust needs them][4]
@@ -41,17 +36,16 @@ For better understanding [`Pin`] purpose, design, limitations and use cases read
 - [Yoshua Wuyts: Safe Pin Projections Through View Types][6]
 - [Official `#[pin_project]` docs][7]
 
-
-
-
 ## Task
 
 Given the following traits:
+
 ```rust
 trait MutMeSomehow {
     fn mut_me_somehow(self: Pin<&mut Self>);
 }
 ```
+
 ```rust
 trait SayHi: fmt::Debug {
     fn say_hi(self: Pin<&Self>) {
@@ -61,8 +55,6 @@ trait SayHi: fmt::Debug {
 ```
 
 Implement them for the following types: `Box<T>`, `Rc<T>`, `Vec<T>`, `String`, `&[u8]`, `T`.
-
-
 
 [`Box`]: https://doc.rust-lang.org/std/boxed/struct.Box.html
 [`Pin`]: https://doc.rust-lang.org/std/pin/struct.Pin.html

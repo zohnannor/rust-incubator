@@ -1,5 +1,4 @@
-Step 1.9: Phantom types
-=======================
+# Step 1.9: Phantom types
 
 __Estimated time__: 1 day
 
@@ -10,6 +9,7 @@ Because [Rust] has a rich type system, a programming logic and semantics are mos
 However, in [Rust], this often causes the compiler to complain, and the solution is to add a "dummy" use by way of [`PhantomData`].
 
 This is a quite common practice when you're writing a highly abstracted generics code. A real-world example (and somewhat scary) would be:
+
 ```rust
 trait CommandGateway<C: Command> {
     type Result;
@@ -86,6 +86,7 @@ where
 ```
 
 For better understanding [`PhantomData`] purpose, design, limitations and use cases, read through the following articles:
+
 - [Official `PhantomData` docs][`PhantomData`]
 - [Rust By Example: 14.9. Phantom type parameters][1]
 - [Rustonomicon: 3.10. PhantomData][2]
@@ -93,16 +94,14 @@ For better understanding [`PhantomData`] purpose, design, limitations and use ca
 - [RIP Tutorial: Using PhantomData as a Type Marker][4]
 - [Sergey Potapov: Phantom Types in Rust][6]
 
-
-
-
 ## Transparency
 
 [`PhantomData`] is transparent for [auto traits][7], which means, for example, that `PhantomData<usize>` is `Send` and `Sized`, while `PhantomData<dyn Any>` is neither `Send` nor `Sized`.
 
-In some situations this allows us to provide the exact semantics we need for a type (like [invariance][8] for [a lifetime][9], for example). 
+In some situations this allows us to provide the exact semantics we need for a type (like [invariance][8] for [a lifetime][9], for example).
 
 In other situations we don't actually care about semantics of the phantom type parameter at all. Moreover, we don't want the substituted type to change [auto traits][7] implementations of the whole type in any way, preserving only the semantics of the actual contained data, as this may impose ergonomic problems to us:
+
 ```rust
 struct Nonce<Of>(PhantomData<Of>, usize);
 
@@ -123,6 +122,7 @@ let nonce: Nonce<dyn Any> = Nonce(PhantomData, 3);
 ```
 
 To omit such problems, let's just form the correct type inside [`PhantomData`], so we always have the desired [auto traits][7] implementations despite the substituted type:
+
 ```rust
 struct Nonce<Of: ?Sized>(PhantomData<AtomicPtr<Box<Of>>>, usize);
 
@@ -136,9 +136,6 @@ thread::spawn(move || {
 let nonce: Nonce<dyn Any> = Nonce(PhantomData, 3);
 ```
 
-
-
-
 ## Task
 
 Implement a `Fact<T>` type which returns some random fact about `T` type that `Fact<T>` is implemented for.
@@ -148,13 +145,11 @@ let f: Fact<Vec<T>> = Fact::new();
 println!("Fact about Vec: {}", f.fact());
 println!("Fact about Vec: {}", f.fact());
 ```
-```
+
+```txt
 Fact about Vec: Vec is heap-allocated.
 Fact about Vec: Vec may re-allocate on growing.
 ```
-
-
-
 
 [`PhantomData`]: https://doc.rust-lang.org/std/marker/struct.PhantomData.html
 [Rust]: https://www.rust-lang.org

@@ -1,23 +1,17 @@
-Step 3.5: Collections and iterators
-===================================
+# Step 3.5: Collections and iterators
 
 __Estimated time__: 1 day
-
-
-
 
 ## `std` collections
 
 [Rust] provides [implementations for commonly used collections][`std::collections`] in its `std` library. They come with [different guarantees][2] and for [different purposes][1], and are usually applicable for 90% use cases.
 
 For better understanding [`std::collections`] purpose, design, limitations and use cases, read through the following articles:
+
 - [Rust Book: 8. Common Collections][5]
 - [Rust By Example: 19.2. Vectors][3]
 - [Rust By Example: 19.7. HashMap][4]
 - [Official `std::collections` docs][`std::collections`]
-
-
-
 
 ## Iterators
 
@@ -30,6 +24,7 @@ While collection represents a some complete set of data, an [`Iterator`] is a wa
 > Iterators are also composable, and it's common to chain them together to do more complex forms of processing.
 
 There are three forms of iteration over a collection in [Rust]:
+
 - `iter()` iterates over _borrowed_ elements (`&T`), so used for read-only operations with a collection.
 - `iter_mut()` iterates over _mutably borrowed_ elements (`&mut T`), so used when in-place elements mutation is required.
 - `into_iter()` iterates over _owned_ element (`T`), so used when whole collection transformation and/or moving is required.
@@ -39,11 +34,9 @@ It's important to remember, that __iterators (and their adapters) are lazy__. [`
 [`Iterator`] comes with a lot of powerful and useful [adapters][9] in `std` library, which makes them highly composable and pleasant to use. If `std` capabilities are not enough for your needs, consider to use [itertools] crate, which provides more non-trivial adapters.
 
 For better understanding [Rust] iterators purpose, design, limitations and use cases, read through the following articles:
+
 - [Rust By Example: 16.4. Iterators][6]
 - [Official `std::iter` docs][`std::iter`]
-
-
-
 
 ## Immutable collections
 
@@ -52,14 +45,12 @@ For better understanding [Rust] iterators purpose, design, limitations and use c
 [Rust] ecosystem has [im] and [rpds] crates, which provide immutable implementations for some collections.
 
 For better understanding immutable collections nature, design, and a motivation behind them, read through the following articles:
+
 - [Official `im` crate docs][im]
 - [Wikipedia: Persistent data structure][10]
 - [Jean Niklas L'orange: Understanding Clojure's Persistent Vectors, pt. 1][15_1]
 - [Jean Niklas L'orange: Understanding Clojure's Persistent Vectors, pt. 2][15_2]
 - [Jean Niklas L'orange: Understanding Clojure's Persistent Vectors, pt. 3][15_3]
-
-
-
 
 ## Concurrent collections
 
@@ -68,16 +59,15 @@ When you need to operate with the same collection from multiple threads, the mos
 [Rust] ecosystem has [crossbeam] and [lockfree] crates, which provide efficient lock-free implementations for some collections usually used in a concurrent context.
 
 For better understanding concurrent collections nature, design, and a motivation behind them, read through the following articles:
+
 - [Aaron Turon: Lock-freedom without garbage collection][13]
 - [Stjepan Glavina: Lock-free Rust: Crossbeam in 2019][14]
 - [Wikipedia: Non-blocking algorithm][12]
 
-
-
-
 ## Task
 
 Write a simple `UsersRepository` trait, which supports 3 operations (consider to chose correct collections):
+
 - returns single `User` by its ID;
 - returns multiple `User`s by their IDs;
 - return IDs of `User`s which `nickname` contains given string (search function).
@@ -85,10 +75,6 @@ Write a simple `UsersRepository` trait, which supports 3 operations (consider to
 Provide an implementation of `UsersRepository` trait backed by some [immutable collection](#immutable-collections).
 
 Prove your implementation correctness with tests.
-
-
-
-
 
 [crossbeam]: https://docs.rs/crossbeam
 [im]: https://docs.rs/im

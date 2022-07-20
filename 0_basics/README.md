@@ -1,5 +1,4 @@
-Step 0: Become familiar with Rust basics
-========================================
+# Step 0: Become familiar with Rust basics
 
 __Estimated time__: 3 days
 
@@ -10,6 +9,7 @@ Polish your familiarity by completing [Rust By Example].
 Read through [Cargo Book] and become familiar with [Cargo] and its workspaces.
 
 After completing these steps, you should be able to answer (and understand why) the following questions:
+
 - What memory model [Rust] has? Is it single-threaded or multiple-threaded? Is it synchronous or asynchronous?
 - What runtime [Rust] has? Does it use a GC (garbage collector)?
 - What statically typing means? What is a benefit of using it?
@@ -31,6 +31,7 @@ After completing these steps, you should be able to answer (and understand why) 
 After you're done notify your lead in an appropriate PR (pull request), and he will exam what you have learned.
 
 _Additional_ articles, which may help to understand the above topic better:
+
 - [Chris Morgan: Rust ownership, the hard way][1]
 - [Ludwig Stecher: Rusts Module System Explained][2]
 - [Tristan Hume: Models of Generics and Metaprogramming: Go, Rust, Swift, D and More][3]
@@ -38,9 +39,6 @@ _Additional_ articles, which may help to understand the above topic better:
 - [Jeff Anderson: Generics Demystified Part 2][5]
 - [Brandon Smith: Three Kinds of Polymorphism in Rust][6]
 - [Jeremy Steward: C++ & Rust: Generics and Specialization][7]
-
-
-
 
 [Cargo]: https://github.com/rust-lang/cargo
 [Cargo Book]: https://doc.rust-lang.org/cargo

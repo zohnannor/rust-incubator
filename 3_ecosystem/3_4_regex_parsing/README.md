@@ -1,16 +1,13 @@
-Step 3.4: Regular expressions and custom parsers
-================================================
+# Step 3.4: Regular expressions and custom parsers
 
 __Estimated time__: 1 day
-
-
-
 
 ## Regular expressions
 
 To operate with [regular expressions][1] there is [regex] crate in [Rust] ecosystem.
 
 Important to know, that in [Rust] __regular expression needs to be compiled before we can use it__. The compilation is not cheap. So, the following code introduces a performance problem:
+
 ```rust
 fn is_email(email: &str) -> bool {
     let re = Regex::new(".+@.+").unwrap();  // compiles every time the function is called
@@ -19,6 +16,7 @@ fn is_email(email: &str) -> bool {
 ```
 
 To omit unnecessary performance penalty we should __compile regular expression once and reuse its compilation result__. This is easily achieved by using [lazy_static] crate both in global and/or local scopes:
+
 ```rust
 lazy_static! {
     static ref REGEX_EMAIL: Regex = Regex::new(".+@.+").unwrap();
@@ -31,29 +29,26 @@ fn is_email(email: &str) -> bool {
 
 This may feel different with how [regular expressions][1] are used in other programming languages, because some of them implicitly cache compilation results and/or do not expose compilation API at all (like [PHP]). But if your background is a language like [Go] or [Java], this concept should be familiar to you.
 
-
-
-
 ## Custom parsers
 
 If regular expressions are [not powerful enough][2] for your parsing problem, then you are ended up with writing your own parser. [Rust] ecosystem has [numerous][3] crates to help with that:
+
 - [nom] is a [parser combinator][4] library. Nearly most performant among others. Especially good for parsing binary stuff (byte/bit-oriented).
 - [pest] is a general purpose parser, which uses [PEG (parsing expression grammar)][5] as input and derives parser's code for it.
 - [lalrpop] is a parser generator framework, which generates [LR(1) parser][6] code from custom grammar files.
 - [combine] is an another [parser combinator][4] library, inspired by the [Haskell] library [Parsec].
 
 For better understanding parsing problem and approaches, along with some examples, read through the following articles:
+
 - [Laurence Tratt: Which Parsing Approach?][9]
 - [Richard L. Apodaca: A Beginner's Guide to Parsing in Rust][10]
 - [Brian Kung: Building a CEDICT parser in Rust with Nom][11]
 
-
-
-
 ## Task
 
 Given the following [Rust `fmt` syntax grammar][7]:
-```
+
+```txt
 format_spec := [[fill]align][sign]['#']['0'][width]['.' precision][type]
 fill := character
 align := '<' | '^' | '>'
@@ -70,10 +65,6 @@ Implement a parser to parse `sign`, `width` and `precision` from a given input (
 Provide implementations in two flavours: [regex]-based and via building a custom parser.
 
 Prove your implementation correctness with tests.
-
-
-
-
 
 [combine]: https://docs.rs/combine
 [Go]: https://golang.org
